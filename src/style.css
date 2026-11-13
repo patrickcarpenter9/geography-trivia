@@ -11,6 +11,26 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+/* A column: top bar, then the map filling all remaining height. */
 #app {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  padding: 0.75rem 1rem;
+  background: #1f2937;
+  color: #fff;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+/* Leaflet needs its container to have a real height, or the map is invisible. */
+#map {
+  flex: 1;
+  min-height: 0;
 }

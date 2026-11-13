@@ -42,7 +42,8 @@ src/data/cities.js  array of { name, state, lat, lng }; US cities only
 ## Conventions
 
 - Map tiles must have **no place labels**, or the answer is printed on the map.
-  Use a label-free basemap (e.g. CARTO `light_nolabels`) and keep the attribution.
+  We use Esri's `World_Light_Gray_Base` (no API key; attribution required). It shows
+  state names from zoom 7, so `maxZoom` stays at 6. CARTO tiles now need an API key.
 - Coordinates are `[lat, lng]` (Leaflet's order). Distances in miles.
 - Keep `scoring.js` free of DOM and Leaflet code so it's easy to test.
 - Map view is limited to the United States (contiguous 48 to start; Alaska and Hawaii are a later decision).
