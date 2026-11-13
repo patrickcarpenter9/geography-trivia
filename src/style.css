@@ -35,6 +35,14 @@ body {
   white-space: nowrap;
 }
 
+.status {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
 .round {
   flex: 1;
   min-width: 14rem;
@@ -73,10 +81,73 @@ body {
   cursor: not-allowed;
 }
 
+/* The area under the top bar. `position: relative` lets the summary panel
+   be positioned on top of the map. */
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
 /* Leaflet needs its container to have a real height, or the map is invisible. */
 #map {
   flex: 1;
-  min-height: 0;
+}
+
+/* End-of-game panel, centered over the map. Leaflet's own layers use z-index
+   values up to 1000, so this needs to be higher to sit on top. */
+.summary {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1100;
+  width: min(24rem, calc(100% - 2rem));
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+}
+
+/* The `hidden` attribute normally hides things, but any `display` rule would
+   override it, so make sure it always wins. */
+.summary[hidden] {
+  display: none;
+}
+
+.summary h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.summary-total {
+  margin: 0.25rem 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-rounds {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.summary-rounds li {
+  padding: 0.35rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.summary-rounds li span {
+  display: block;
+}
+
+.summary-detail {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Crosshair while placing a pin (Leaflet sets its own cursor, so be specific). */
