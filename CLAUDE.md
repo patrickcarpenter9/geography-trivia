@@ -20,7 +20,7 @@ there's a clear reason.
 - `npm run dev`: local dev server with live reload (http://localhost:5173/geography-trivia/)
 - `npm run build`: production build into `dist/`
 - `npm run preview`: serve the built `dist/` locally to check it before deploying
-- `npm test`: run unit tests (`src/*.test.js`) with Node's built-in test runner; no test library
+- `npm test`: run unit tests (`src/**/*.test.js`) with Node's built-in test runner; no test library
 
 ## Layout
 
