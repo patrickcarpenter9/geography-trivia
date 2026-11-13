@@ -1,6 +1,7 @@
 // The rules of a round. This file holds the game's state and decides what
 // happens next; it calls map.js and ui.js to actually show things.
 import { CITIES } from './data/cities.js';
+import { distanceMiles, pointsForDistance, MAX_POINTS } from './scoring.js';
 import { onMapClick, setGuessPin, revealAnswer, clearRound } from './map.js';
 import { setPrompt, setMessage, setButton, onButtonClick, setMapClickable } from './ui.js';
 
@@ -44,8 +45,13 @@ function handleMapClick(lat, lng) {
 function handleButtonClick() {
   if (phase === 'guessing' && guess) {
     phase = 'revealed';
+    const miles = distanceMiles(guess, city);
+    const points = pointsForDistance(miles);
+
     revealAnswer(guess, city, cityLabel(city));
-    setMessage(`Green is ${cityLabel(city)}. Blue is your guess.`);
+    setMessage(
+      `${formatMiles(miles)} away: ${points.toLocaleString()} of ${MAX_POINTS.toLocaleString()} points.`,
+    );
     setButton('Next city', true);
     setMapClickable(false);
   } else if (phase === 'revealed') {
@@ -56,6 +62,12 @@ function handleButtonClick() {
 /** "Austin, TX": always include the state, since some names repeat. */
 function cityLabel(c) {
   return `${c.name}, ${c.state}`;
+}
+
+/** "1 mile", "37 miles", "1,204 miles" */
+function formatMiles(miles) {
+  const rounded = Math.round(miles);
+  return `${rounded.toLocaleString()} ${rounded === 1 ? 'mile' : 'miles'}`;
 }
 
 /** Pick a random city, never the same one twice in a row. */
