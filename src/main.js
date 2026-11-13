@@ -1,13 +1,10 @@
 // Entry point. Vite starts here (see the <script> tag in index.html).
+// main.js only sets things up in the right order; the logic lives in the modules.
 import './style.css';
+import { renderLayout } from './ui.js';
 import { createMap } from './map.js';
+import { startGame } from './game.js';
 
-document.querySelector('#app').innerHTML = `
-  <header class="topbar">
-    <h1>Geography Trivia</h1>
-  </header>
-  <div id="map"></div>
-`;
-
-// The map needs its container to exist first, so create it after the HTML above.
-createMap('map');
+renderLayout(); // 1. build the page, including the empty #map container
+createMap('map'); // 2. the map needs that container to exist
+startGame(); // 3. hook up clicks and ask the first question

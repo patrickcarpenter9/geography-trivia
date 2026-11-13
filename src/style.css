@@ -18,7 +18,12 @@ body {
   flex-direction: column;
 }
 
+/* Title | prompt + message | button, in one row that wraps on narrow screens. */
 .topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
   padding: 0.75rem 1rem;
   background: #1f2937;
   color: #fff;
@@ -26,11 +31,55 @@ body {
 
 .topbar h1 {
   margin: 0;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.round {
+  flex: 1;
+  min-width: 14rem;
+}
+
+.prompt {
+  margin: 0;
   font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.message {
+  margin: 0.15rem 0 0;
+  font-size: 0.875rem;
+  color: #d1d5db;
+}
+
+.action {
+  padding: 0.6rem 1.1rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: #2563eb;
+  border: 0;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.action:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.action:disabled {
+  background: #4b5563;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 /* Leaflet needs its container to have a real height, or the map is invisible. */
 #map {
   flex: 1;
   min-height: 0;
+}
+
+/* Crosshair while placing a pin (Leaflet sets its own cursor, so be specific). */
+#map.placing.leaflet-container {
+  cursor: crosshair;
 }

@@ -17,11 +17,23 @@ const TILE_URL =
 const ATTRIBUTION = 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ';
 const MAX_ZOOM = 6;
 
+// Pin styles. We draw pins as circles instead of Leaflet's default marker
+// image, which needs extra setup to load correctly when bundled by Vite.
+const GUESS_STYLE = { radius: 8, color: '#fff', weight: 2, fillColor: '#2563eb', fillOpacity: 1 };
+const ANSWER_STYLE = { radius: 8, color: '#fff', weight: 2, fillColor: '#16a34a', fillOpacity: 1 };
+const LINE_STYLE = { color: '#374151', weight: 2, dashArray: '6 6' };
+
+// The module keeps one map and one "layer group" holding this round's pins.
+// Clearing the group removes every pin at once.
+let map;
+let roundLayer;
+let guessPin = null;
+
 /**
- * Create the map inside the element with the given id and return it.
+ * Create the map inside the element with the given id.
  */
 export function createMap(elementId) {
-  const map = L.map(elementId, {
+  map = L.map(elementId, {
     // Keep the player near the US: panning stops a little past the edges...
     maxBounds: CONTIGUOUS_US.pad(0.25),
     maxBoundsViscosity: 1.0, // 1.0 = a hard wall instead of a rubber-band bounce
@@ -37,8 +49,52 @@ export function createMap(elementId) {
     maxZoom: MAX_ZOOM,
   }).addTo(map);
 
-  // Start with the whole contiguous US in view, whatever the screen size.
-  map.fitBounds(CONTIGUOUS_US);
+  roundLayer = L.layerGroup().addTo(map);
+  showWholeCountry();
+}
 
-  return map;
+/**
+ * Call `handler(lat, lng)` whenever the player clicks the map.
+ */
+export function onMapClick(handler) {
+  map.on('click', (event) => handler(event.latlng.lat, event.latlng.lng));
+}
+
+/**
+ * Put the player's guess pin at this spot, moving it if it's already there.
+ */
+export function setGuessPin(lat, lng) {
+  if (guessPin) {
+    guessPin.setLatLng([lat, lng]);
+  } else {
+    guessPin = L.circleMarker([lat, lng], GUESS_STYLE).addTo(roundLayer);
+  }
+}
+
+/**
+ * Show the real location, draw a line from the guess to it,
+ * and zoom so both are in view.
+ */
+export function revealAnswer(guess, answer, label) {
+  const answerPin = L.circleMarker([answer.lat, answer.lng], ANSWER_STYLE)
+    .bindTooltip(label, { permanent: true, direction: 'top', offset: [0, -8] })
+    .addTo(roundLayer);
+  L.polyline([[guess.lat, guess.lng], [answer.lat, answer.lng]], LINE_STYLE).addTo(roundLayer);
+  answerPin.bringToFront();
+
+  const bothPoints = L.latLngBounds([[guess.lat, guess.lng], [answer.lat, answer.lng]]);
+  map.flyToBounds(bothPoints, { padding: [80, 80], maxZoom: MAX_ZOOM, duration: 0.8 });
+}
+
+/**
+ * Remove all pins and lines and zoom back out to the whole country.
+ */
+export function clearRound() {
+  roundLayer.clearLayers();
+  guessPin = null;
+  showWholeCountry();
+}
+
+function showWholeCountry() {
+  map.fitBounds(CONTIGUOUS_US);
 }
