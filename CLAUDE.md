@@ -11,7 +11,8 @@ there's a clear reason.
 
 - **Vite**: dev server and build tool. Plain JavaScript (ES modules), no framework, no TypeScript.
 - **Leaflet**: interactive map (`npm` package `leaflet`; import its CSS too).
-- **GitHub Pages**: hosting, deployed by a GitHub Actions workflow (not set up yet).
+- **GitHub Pages**: hosting. `.github/workflows/deploy.yml` tests, builds, and publishes on every
+  push to `main`. Live at https://patrickcarpenter9.github.io/geography-trivia/
 
 ## Commands
 
