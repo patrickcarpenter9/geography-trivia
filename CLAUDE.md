@@ -45,5 +45,7 @@ src/data/cities.js  array of { name, state, lat, lng }; US cities only
   We use Esri's `World_Light_Gray_Base` (no API key; attribution required). It shows
   state names from zoom 7, so `maxZoom` stays at 6. CARTO tiles now need an API key.
 - Coordinates are `[lat, lng]` (Leaflet's order). Distances in miles.
+- Some city names repeat across states (Portland ME/OR, Charleston SC/WV), so always
+  show the city as "Name, ST" in the prompt.
 - Keep `scoring.js` free of DOM and Leaflet code so it's easy to test.
 - Map view is limited to the United States (contiguous 48 to start; Alaska and Hawaii are a later decision).
